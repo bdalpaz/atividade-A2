@@ -74,3 +74,47 @@ academia/
     │   └── styles.css
     └── js/
         └── scripts.js
+
+## Responsabilidades das Camadas
+
+### Routes (src/routes/)
+- Definem as URLs (endpoints) da aplicação e o método HTTP de cada uma.
+- Aplicam middlewares de autenticação (authMiddleware) e de permissão (permissaoMiddleware).
+- Encaminham a requisição para o controller correspondente.
+- *Não contêm lógica de negócio nem acesso a banco.*
+
+Exemplo:
+js
+router.get('/alunos', authMiddleware, alunoController.listar);
+router.post('/planos', authMiddleware, permissao('ADMIN'), planoController.criar);
+
+
+### Controllers (src/controllers/)
+- Recebem req e res do Express.
+- Extraem dados da requisição (req.body, req.params, req.query, req.session).
+- Chamam o *service* apropriado.
+- Tratam erros lançados pelo service e renderizam a view (ou redirecionam).
+- *Não contêm regras de negócio nem SQL.*
+
+### Services (src/services/)
+- Concentram *toda a lógica de negócio* do sistema.
+- Validam dados (formato de CPF, e-mail, datas).
+- Aplicam regras (ex.: bloqueio de matrícula duplicada vigente).
+- Compõem operações que envolvem múltiplos repositórios.
+- Lançam erros descritivos que serão capturados pelos controllers.
+- *Não conhecem req/res nem SQL.*
+
+### Repositories (src/repositories/)
+- *Única camada que conversa com o banco de dados.*
+- Encapsulam comandos SQL (SELECT, INSERT, UPDATE, DELETE).
+- Retornam objetos JavaScript puros (ou null quando não há registro).
+- *Não validam regras de negócio.*
+
+### Middlewares (src/middlewares/)
+- *authMiddleware*: verifica se existe req.session.usuario. Se não houver, redireciona para /login.
+- *permissaoMiddleware(perfil)*: factory que retorna um middleware verificando se req.session.usuario.perfil === perfil. Caso contrário, renderiza a página 403.ejs.
+
+### Views (src/views/)
+- Templates EJS renderizados pelos controllers.
+- Recebem dados via variáveis e exibem ao usuário.
+- Podem conter pequenos blocos de JS de cliente para interações simples (filtros, máscaras de input).
