@@ -118,3 +118,26 @@ router.post('/planos', authMiddleware, permissao('ADMIN'), planoController.criar
 - Templates EJS renderizados pelos controllers.
 - Recebem dados via variáveis e exibem ao usuário.
 - Podem conter pequenos blocos de JS de cliente para interações simples (filtros, máscaras de input).
+
+## Organização das Rotas
+
+As rotas são separadas em arquivos por contexto (authRoutes, alunoRoutes, etc.) e agrupadas em *públicas* e *privadas*:
+
+### Rotas Públicas
+Não exigem sessão ativa. Acessíveis a qualquer visitante.
+- /login (GET e POST)
+- Recursos estáticos: /css/*, /js/*
+
+### Rotas Privadas (exigem authMiddleware)
+Exigem sessão ativa de qualquer perfil.
+- /dashboard
+- /alunos (listagem, formulário, criação, edição)
+- /matriculas (listagem, criação, cancelamento)
+- /catraca (liberação por CPF)
+- /logout
+
+### Rotas Privadas com Perfil Restrito (exigem permissaoMiddleware('ADMIN'))
+- /planos/* (todas as operações)
+- DELETE /alunos/:id (exclusão de aluno)
+
+> O detalhamento completo de cada rota está documentado em rotas.md.
