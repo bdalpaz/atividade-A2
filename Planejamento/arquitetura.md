@@ -141,3 +141,99 @@ Exigem sessão ativa de qualquer perfil.
 - DELETE /alunos/:id (exclusão de aluno)
 
 > O detalhamento completo de cada rota está documentado em rotas.md.
+
+## Entidades do Sistema
+
+### Usuario
+Funcionário da academia que acessa o sistema.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INTEGER PK | Identificador único |
+| nome | TEXT | Nome completo |
+| email | TEXT UNIQUE | E-mail de login |
+| senha_hash | TEXT | Hash bcrypt da senha |
+| perfil | TEXT | ADMIN ou RECEPCAO |
+| criado_em | DATETIME | Data de criação |
+
+### Aluno
+Cliente cadastrado na academia.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INTEGER PK | Identificador único |
+| nome | TEXT | Nome completo |
+| cpf | TEXT UNIQUE | CPF (apenas dígitos) |
+| email | TEXT | E-mail de contato |
+| telefone | TEXT | Telefone |
+| data_nascimento | DATE | Data de nascimento |
+| criado_em | DATETIME | Data de cadastro |
+
+### Plano
+Pacote comercial ofertado pela academia.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INTEGER PK | Identificador único |
+| nome | TEXT | Nome do plano (ex.: Mensal, Trimestral) |
+| duracao_meses | INTEGER | Quantidade de meses de vigência |
+| valor | REAL | Valor em reais |
+| descricao | TEXT | Descrição livre |
+| ativo | INTEGER (0/1) | Se está disponível para venda |
+
+### Matricula
+Vínculo entre um aluno e um plano, com vigência.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INTEGER PK | Identificador único |
+| aluno_id | INTEGER FK | Referência a aluno.id |
+| plano_id | INTEGER FK | Referência a plano.id |
+| data_inicio | DATE | Data de início da vigência |
+| data_fim | DATE | Data calculada com base no plano |
+| status | TEXT | ATIVA ou CANCELADA |
+| criada_em | DATETIME | Data de criação do registro |
+
+## Relacionamento entre Entidades
+
+
+┌──────────┐                       ┌──────────┐
+│ Usuario  │  (login no sistema)   │  Aluno   │
+└──────────┘                       └────┬─────┘
+                                        │ 1
+                                        │
+                                        │ N
+                                   ┌────▼────────┐         ┌─────────┐
+                                   │  Matricula  │ N ───1  │  Plano  │
+                                   └─────────────┘         └─────────┘
+
+
+- *Usuario* é independente — representa quem opera o sistema, não tem relação direta com Aluno, Plano ou Matricula.
+- *Aluno 1 : N Matricula* — um aluno pode ter várias matrículas ao longo do tempo (histórico), mas apenas *uma ativa e vigente* simultaneamente (regra de negócio).
+- *Plano 1 : N Matricula* — um plano pode estar vinculado a várias matrículas; cada matrícula pertence a exatamente um plano.
+- *Aluno N : N Plano (através de Matricula)* — o relacionamento muitos-para-muitos entre Aluno e Plano é materializado pela entidade Matricula, que carrega atributos próprios (datas, status).
+
+### Diagrama Entidade-Relacionamento (textual)
+
+
+Usuario (id, nome, email, senha_hash, perfil, criado_em)
+
+Aluno (id, nome, cpf, email, telefone, data_nascimento, criado_em)
+  └──< 1:N >── Matricula
+
+Plano (id, nome, duracao_meses, valor, descricao, ativo)
+  └──< 1:N >── Matricula
+
+Matricula (id, aluno_id [FK], plano_id [FK], data_inicio, data_fim, status, criada_em)
+
+
+## Regra de Negócio Principal
+Implementada na camada de *Service* (matriculaService.js):
+
+> "Um aluno não pode ter mais de uma matrícula com status ATIVA e cuja data_fim seja igual ou posterior à data atual."
+
+js
+const matriculaAtiva = matriculaRepository.buscarAtivaPorAluno(alunoId);
+if (matriculaAtiva) {
+  throw new Error('Este aluno já possui uma matrícula ativa e vigente.');
+}
