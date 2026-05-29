@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Controle de acesso</small>Resultado</h1>
+    <a href="/catraca" class="btn btn--ghost">Nova consulta</a>
+  </div>
+
+  <div style="max-width:480px;margin:0 auto">
+    <div class="gate <%= resultado.liberado ? 'gate--ok' : 'gate--block' %>">
+      <div class="gate-icon"><%= resultado.liberado ? '✓' : '✕' %></div>
+      <div class="gate-title"><%= resultado.liberado ? 'LIBERADO' : 'BLOQUEADO' %></div>
+      <p class="gate-msg"><%= resultado.motivo %></p>
+      <% if (resultado.aluno) { %>
+        <div class="gate-detail">
+          Aluno: <strong><%= resultado.aluno.nome %></strong>
+          <% if (resultado.matricula) { %><br>Plano <%= resultado.matricula.plano_nome %> · válido até <%= resultado.matricula.data_fim %><% } %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</main>
+<%- include('../partials/footer') %>

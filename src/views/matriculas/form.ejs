@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Nova</small>Matrícula</h1>
+    <a href="/matriculas" class="btn btn--ghost">Voltar</a>
+  </div>
+
+  <div class="card" style="max-width:560px">
+    <% if (erro) { %><div class="alert alert--error"><%= erro %></div><% } %>
+
+    <form action="/matriculas" method="POST">
+      <div class="form-grid">
+        <div class="field">
+          <label for="aluno_id">Aluno</label>
+          <select id="aluno_id" name="aluno_id" required>
+            <option value="">Selecione...</option>
+            <% alunos.forEach(function (a) { %>
+              <option value="<%= a.id %>" <%= String(selecionado.aluno_id) === String(a.id) ? 'selected' : '' %>><%= a.nome %> — <%= a.cpf %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="field">
+          <label for="plano_id">Plano</label>
+          <select id="plano_id" name="plano_id" required>
+            <option value="">Selecione...</option>
+            <% planos.forEach(function (p) { %>
+              <option value="<%= p.id %>" <%= String(selecionado.plano_id) === String(p.id) ? 'selected' : '' %>><%= p.nome %> (<%= p.duracao_meses %>m) — R$ <%= Number(p.valor).toFixed(2).replace('.', ',') %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="field">
+          <label for="data_inicio">Data de início</label>
+          <input type="date" id="data_inicio" name="data_inicio" value="<%= selecionado.data_inicio || '' %>" required>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn--primary">Criar matrícula</button>
+        <a href="/matriculas" class="btn btn--ghost">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('../partials/footer') %>

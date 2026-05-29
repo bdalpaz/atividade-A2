@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Controle de acesso</small>Catraca</h1>
+  </div>
+
+  <div class="card" style="max-width:480px;margin:0 auto">
+    <% if (erro) { %><div class="alert alert--error"><%= erro %></div><% } %>
+    <p class="page-sub" style="margin-bottom:20px">Informe o CPF do aluno para validar a liberação de entrada.</p>
+    <form action="/catraca/liberar" method="POST">
+      <div class="field">
+        <label for="cpf">CPF do aluno</label>
+        <input type="text" id="cpf" name="cpf" value="<%= cpf %>" data-mask="cpf" placeholder="000.000.000-00" autofocus required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn--primary btn--block">Validar acesso</button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('../partials/footer') %>

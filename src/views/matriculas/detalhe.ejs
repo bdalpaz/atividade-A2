@@ -1,0 +1,34 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Matrícula #<%= matricula.id %></small><%= matricula.aluno_nome %></h1>
+    <a href="/matriculas" class="btn btn--ghost">Voltar</a>
+  </div>
+
+  <% var vencida = matricula.status === 'ATIVA' && matricula.data_fim < hoje; %>
+  <div class="card" style="max-width:640px">
+    <dl class="dl">
+      <dt>Aluno</dt><dd><%= matricula.aluno_nome %> (<%= matricula.aluno_cpf %>)</dd>
+      <dt>Plano</dt><dd><%= matricula.plano_nome %> · <%= matricula.plano_duracao %> meses</dd>
+      <dt>Início</dt><dd><%= matricula.data_inicio %></dd>
+      <dt>Término</dt><dd><%= matricula.data_fim %></dd>
+      <dt>Status</dt>
+      <dd>
+        <% if (matricula.status === 'CANCELADA') { %><span class="pill pill--cancelada">CANCELADA</span>
+        <% } else if (vencida) { %><span class="pill pill--vencida">VENCIDA</span>
+        <% } else { %><span class="pill pill--ativa">ATIVA</span><% } %>
+      </dd>
+      <dt>Criada em</dt><dd><%= matricula.criada_em %></dd>
+    </dl>
+
+    <% if (matricula.status === 'ATIVA') { %>
+    <div class="form-actions">
+      <form action="/matriculas/<%= matricula.id %>/cancelar?_method=PUT" method="POST" data-confirm="Cancelar esta matrícula?">
+        <button type="submit" class="btn btn--danger">Cancelar matrícula</button>
+      </form>
+    </div>
+    <% } %>
+  </div>
+</main>
+<%- include('../partials/footer') %>
