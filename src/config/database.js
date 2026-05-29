@@ -59,7 +59,7 @@ function criarTabelas() {
 }
 
 function contar(tabela) {
-  const res = db.exec(SELECT COUNT(*) AS total FROM ${tabela});
+  const res = db.exec(`SELECT COUNT(*) AS total FROM ${tabela}`);
   return res.length ? res[0].values[0][0] : 0;
 }
 
@@ -68,7 +68,7 @@ function popularSeeds() {
     const senhaAdmin = bcrypt.hashSync('admin123', 10);
     const senhaRecep = bcrypt.hashSync('recep123', 10);
     db.run(
-      INSERT INTO usuarios (nome, email, senha_hash, perfil) VALUES (?, ?, ?, ?), (?, ?, ?, ?),
+      `INSERT INTO usuarios (nome, email, senha_hash, perfil) VALUES (?, ?, ?, ?), (?, ?, ?, ?)`,
       [
         'Administrador', 'admin@gymcontrol.com', senhaAdmin, 'ADMIN',
         'Recepção', 'recepcao@gymcontrol.com', senhaRecep, 'RECEPCAO',
