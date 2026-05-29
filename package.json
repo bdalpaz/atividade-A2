@@ -1,0 +1,21 @@
+{
+  "name": "gymcontrol",
+  "version": "1.0.0",
+  "description": "GymControl — Sistema de Controle de Academia (A2 — Node.js + Express, arquitetura em camadas)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["express", "academia", "ejs", "sqlite", "mvc"],
+  "author": "Alice Botton Dal Paz, Anthony Guilherme Cazuni da Silva, Gabriel Henrique Robette Ferri",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "method-override": "^3.0.0",
+    "sql.js": "^1.10.3"
+  }
+}
