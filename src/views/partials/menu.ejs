@@ -1,0 +1,27 @@
+<% if (typeof usuario !== 'undefined' && usuario) { %>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="/dashboard" class="brand">
+      <span class="brand-mark">GYM</span><span class="brand-rest">CONTROL</span>
+    </a>
+    <nav class="nav">
+      <a href="/dashboard" class="nav-link">Dashboard</a>
+      <a href="/alunos" class="nav-link">Alunos</a>
+      <a href="/matriculas" class="nav-link">Matrículas</a>
+      <% if (usuario.perfil === 'ADMIN') { %>
+        <a href="/planos" class="nav-link">Planos</a>
+      <% } %>
+      <a href="/catraca" class="nav-link nav-link--accent">Catraca</a>
+    </nav>
+    <div class="user-box">
+      <div class="user-info">
+        <span class="user-name"><%= usuario.nome %></span>
+        <span class="badge badge--<%= usuario.perfil === 'ADMIN' ? 'admin' : 'recep' %>"><%= usuario.perfil %></span>
+      </div>
+      <form action="/logout?_method=POST" method="POST" class="logout-form">
+        <button type="submit" class="btn btn--ghost btn--sm">Sair</button>
+      </form>
+    </div>
+  </div>
+</header>
+<% } %>

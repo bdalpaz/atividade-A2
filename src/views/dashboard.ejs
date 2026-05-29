@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+<%- include('partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Visão geral</small>Dashboard</h1>
+  </div>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-label">Alunos cadastrados</div>
+      <div class="stat-value stat-value--white"><%= indicadores.totalAlunos %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Matrículas ativas</div>
+      <div class="stat-value"><%= indicadores.matriculasAtivas %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Planos disponíveis</div>
+      <div class="stat-value stat-value--orange"><%= indicadores.planosDisponiveis %></div>
+    </div>
+  </section>
+
+  <h2 style="font-family:var(--font-display);font-size:1.4rem;margin:10px 0 18px;letter-spacing:.5px;">Atalhos</h2>
+  <section class="actions-grid">
+    <a href="/alunos" class="action-card">
+      <h3>Gerenciar alunos</h3>
+      <p>Cadastrar, editar e buscar alunos.</p>
+    </a>
+    <a href="/matriculas" class="action-card">
+      <h3>Matrículas</h3>
+      <p>Criar e acompanhar matrículas vigentes.</p>
+    </a>
+    <a href="/catraca" class="action-card">
+      <h3>Catraca</h3>
+      <p>Liberar acesso por CPF do aluno.</p>
+    </a>
+    <% if (usuario.perfil === 'ADMIN') { %>
+    <a href="/planos" class="action-card">
+      <h3>Planos</h3>
+      <p>Administrar o catálogo de planos.</p>
+    </a>
+    <% } %>
+  </section>
+</main>
+<%- include('partials/footer') %>
