@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Catálogo</small>Planos</h1>
+    <a href="/planos/novo" class="btn btn--primary">+ Novo plano</a>
+  </div>
+
+  <% if (sucesso) { %>
+    <div class="alert alert--success"><%= sucesso %></div>
+  <% } %>
+
+  <% if (planos.length === 0) { %>
+    <div class="card empty">
+      <h3>Nenhum plano cadastrado</h3>
+      <p>Crie o primeiro plano comercial.</p>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Duração</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th style="text-align:right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% planos.forEach(function (p) { %>
+          <tr>
+            <td><strong><%= p.nome %></strong><% if (p.descricao) { %><br><span class="muted" style="font-size:.82rem"><%= p.descricao %></span><% } %></td>
+            <td class="muted"><%= p.duracao_meses %> <%= p.duracao_meses === 1 ? 'mês' : 'meses' %></td>
+            <td>R$ <%= Number(p.valor).toFixed(2).replace('.', ',') %></td>
+            <td>
+              <% if (p.ativo) { %><span class="pill pill--ativa">ATIVO</span><% } else { %><span class="pill pill--cancelada">INATIVO</span><% } %>
+            </td>
+            <td>
+              <div class="cell-actions">
+                <a href="/planos/<%= p.id %>/editar" class="btn btn--ghost btn--sm">Editar</a>
+                <form action="/planos/<%= p.id %>?_method=DELETE" method="POST" data-confirm="Excluir o plano <%= p.nome %>?">
+                  <button type="submit" class="btn btn--danger btn--sm">Excluir</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</main>
+<%- include('../partials/footer') %>

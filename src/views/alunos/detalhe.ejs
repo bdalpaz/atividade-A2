@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title"><small>Aluno</small><%= aluno.nome %></h1>
+    <div style="display:flex;gap:10px">
+      <a href="/alunos/<%= aluno.id %>/editar" class="btn btn--primary">Editar</a>
+      <a href="/alunos" class="btn btn--ghost">Voltar</a>
+    </div>
+  </div>
+
+  <div class="card" style="max-width:640px">
+    <dl class="dl">
+      <dt>Nome</dt><dd><%= aluno.nome %></dd>
+      <dt>CPF</dt><dd><%= aluno.cpf %></dd>
+      <dt>E-mail</dt><dd><%= aluno.email || '—' %></dd>
+      <dt>Telefone</dt><dd><%= aluno.telefone || '—' %></dd>
+      <dt>Nascimento</dt><dd><%= aluno.data_nascimento || '—' %></dd>
+      <dt>Cadastrado em</dt><dd><%= aluno.criado_em %></dd>
+    </dl>
+  </div>
+</main>
+<%- include('../partials/footer') %>
