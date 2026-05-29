@@ -1,0 +1,121 @@
+# Sistema de Controle de Academia
+
+Aplicação web para gestão administrativa de uma academia de musculação: cadastro de alunos, catálogo de planos, controle de matrículas vigentes e liberação de acesso (catraca) por validação de CPF.
+
+Trabalho desenvolvido para a disciplina (A2), aplicando **arquitetura em camadas** (Controller → Service → Repository), sessões, middlewares, rotas públicas e privadas, e renderização de views no servidor.
+
+## Stack
+
+| Camada | Tecnologia |
+|---|---|
+| Runtime | Node.js |
+| Framework HTTP | Express |
+| View Engine | EJS |
+| Banco de Dados | SQLite via `sql.js` |
+| Autenticação | `bcryptjs` + `express-session` |
+| Utilitários | `method-override` (PUT/DELETE em formulários) |
+
+## Pré-requisitos
+
+- Node.js 18 ou superior
+- npm
+
+## Instalação e execução
+
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/bdalpaz/atividade-A2.git
+cd atividade-A2
+
+# 2. Instalar as dependências
+npm install
+
+# 3. Iniciar a aplicação
+npm start
+```
+
+A aplicação sobe em **http://localhost:3000**. Na primeira execução, o banco `database/academia.db` é criado automaticamente e populado com dados de demonstração (usuários, planos e alguns alunos).
+
+Para desenvolvimento com recarga automática a cada alteração:
+
+```bash
+npm run dev
+```
+
+## Contas de demonstração
+
+| Perfil | E-mail | Senha |
+|---|---|---|
+| ADMIN | `admin@gymcontrol.com` | `admin123` |
+| RECEPÇÃO | `recepcao@gymcontrol.com` | `recep123` |
+
+> O perfil **ADMIN** tem acesso ao módulo de Planos e pode excluir alunos. O perfil **RECEPÇÃO** acessa o restante (alunos, matrículas e catraca), mas é bloqueado (403) nas áreas restritas.
+
+## Funcionalidades
+
+- **Autenticação por sessão** com senhas em hash (bcrypt) e controle de acesso por perfil via middleware.
+- **Alunos** — cadastro, edição, busca por nome/CPF e exclusão (somente ADMIN), com validação completa de CPF e CPF único.
+- **Planos** (somente ADMIN) — CRUD do catálogo comercial (nome, duração, valor, descrição).
+- **Matrículas** — criação vinculando aluno e plano, com cálculo automático da data de término e cancelamento. **Regra de negócio principal:** um aluno não pode ter mais de uma matrícula ATIVA e vigente ao mesmo tempo.
+- **Catraca** — liberação de acesso por CPF, verificando se há matrícula ativa e dentro do prazo.
+- **Dashboard** — indicadores resumidos (alunos cadastrados, matrículas ativas, planos disponíveis).
+
+## Estrutura do projeto
+
+```
+atividade-A2/
+├── server.js                  # Bootstrap: Express, sessão, middlewares, rotas
+├── package.json
+├── database/
+│   └── academia.db            # SQLite (gerado automaticamente)
+├── public/
+│   ├── css/styles.css
+│   └── js/scripts.js          # Máscara de CPF, confirmação de exclusão
+├── src/
+│   ├── config/database.js     # Conexão, schema e seeds
+│   ├── routes/                # Definição das rotas por contexto
+│   ├── controllers/           # Recebem req/res e chamam os services
+│   ├── services/              # Regras de negócio e validações
+│   ├── repositories/          # Único ponto de acesso ao banco
+│   ├── middlewares/           # authMiddleware e permissaoMiddleware
+│   └── views/                 # Templates EJS
+├── Planejamento/              # Entregas da Parte 1
+└── Relatórios/                # Relatórios individuais da Parte 2
+```
+
+O fluxo de uma requisição percorre as camadas na ordem:
+
+```
+ROUTES → CONTROLLERS → SERVICES → REPOSITORIES → DATABASE
+```
+
+Cada camada tem uma responsabilidade única: as rotas aplicam os middlewares e encaminham para o controller; o controller lida com `req`/`res`; o service concentra a lógica de negócio (sem conhecer `req`/`res` nem SQL); e o repository é o único que executa SQL.
+
+## Rotas principais
+
+| Método | Rota | Acesso | Finalidade |
+|---|---|---|---|
+| GET/POST | `/login` | Público | Tela e processamento de login |
+| POST | `/logout` | Privado | Encerra a sessão |
+| GET | `/dashboard` | Privado | Indicadores e atalhos |
+| GET/POST/PUT | `/alunos` | Privado | Listagem e CRUD de alunos |
+| DELETE | `/alunos/:id` | ADMIN | Exclusão de aluno |
+| GET/POST/PUT/DELETE | `/planos` | ADMIN | CRUD de planos |
+| GET/POST | `/matriculas` | Privado | Listagem e criação de matrículas |
+| PUT | `/matriculas/:id/cancelar` | Privado | Cancelamento de matrícula |
+| GET/POST | `/catraca` | Privado | Liberação de acesso por CPF |
+
+> A documentação completa das rotas está em `Planejamento/rotas.md`.
+
+## Equipe
+
+| Integrante | Responsabilidade principal |
+|---|---|
+| Alice Botton Dal Paz | Camada de Service e regras de negócio |
+| Anthony Guilherme Cazuni da Silva | Camada de Repository, banco de dados e infraestrutura |
+| Gabriel Henrique Robette Ferri | Controllers, rotas, views (EJS), CSS e JavaScript de cliente |
+
+## Observações
+
+- O arquivo `database/academia.db` está no `.gitignore`, pois é recriado automaticamente a partir dos seeds. Para reiniciar o banco do zero, basta apagá-lo e reiniciar a aplicação.
+- As senhas das contas de demonstração são apenas para testes locais.
