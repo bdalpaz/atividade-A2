@@ -1,6 +1,6 @@
 # Definição das Rotas
 
-Este documento lista todas as rotas HTTP do sistema *GymControl*, separadas por nível de acesso.
+Este documento lista todas as rotas HTTP do sistema *Academia Top Das Tops*, separadas por nível de acesso.
 
 ## Convenções
 - *Público*: acessível sem autenticação.

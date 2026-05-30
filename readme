@@ -46,8 +46,8 @@ npm run dev
 
 | Perfil | E-mail | Senha |
 |---|---|---|
-| ADMIN | `admin@gymcontrol.com` | `admin123` |
-| RECEPÇÃO | `recepcao@gymcontrol.com` | `recep123` |
+| ADMIN | `admin@AcademiaTopDasTops.com` | `admin123` |
+| RECEPÇÃO | `recepcao@AcademiaTopDasTops.com` | `recep123` |
 
 > O perfil **ADMIN** tem acesso ao módulo de Planos e pode excluir alunos. O perfil **RECEPÇÃO** acessa o restante (alunos, matrículas e catraca), mas é bloqueado (403) nas áreas restritas.
 

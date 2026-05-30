@@ -1,7 +1,7 @@
 {
-  "name": "gymcontrol",
+  "name": "AcademiaTopDasTops",
   "version": "1.0.0",
-  "description": "GymControl — Sistema de Controle de Academia (A2 — Node.js + Express, arquitetura em camadas)",
+  "description": "AcademiaTopDasTops — Sistema de Controle de Academia (A2 — Node.js + Express, arquitetura em camadas)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

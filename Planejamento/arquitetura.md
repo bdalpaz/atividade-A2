@@ -1,5 +1,5 @@
 ## Visão Geral
-O *GymControl* é construído sobre uma arquitetura web em *camadas*, na qual cada nível possui uma responsabilidade única e bem delimitada. O fluxo de uma requisição HTTP percorre obrigatoriamente as camadas na seguinte ordem:
+O *Academia Top Das Tops* é construído sobre uma arquitetura web em *camadas*, na qual cada nível possui uma responsabilidade única e bem delimitada. O fluxo de uma requisição HTTP percorre obrigatoriamente as camadas na seguinte ordem:
 
 
 ROUTES → CONTROLLERS → SERVICES → REPOSITORIES → DATABASE

@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "gymcontrol-secret-dev",
+    secret: process.env.SESSION_SECRET || "AcademiaTopDasTops-secret-dev",
     resave: false,
     saveUninitialized: false,
     cookie: { httpOnly: true, maxAge: 1000 * 60 * 60 * 4 }, // 4 horas
@@ -65,7 +65,7 @@ database
   .init()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`GymControl rodando em http://localhost:${PORT}`);
+      console.log(`Academia Top Das Tops rodando em http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
