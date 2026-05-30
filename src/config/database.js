@@ -70,8 +70,8 @@ function popularSeeds() {
     db.run(
       `INSERT INTO usuarios (nome, email, senha_hash, perfil) VALUES (?, ?, ?, ?), (?, ?, ?, ?)`,
       [
-        'Administrador', 'admin@AcademiaTopDasTops.com', senhaAdmin, 'ADMIN',
-        'Recepção', 'recepcao@AcademiaTopDasTops.com', senhaRecep, 'RECEPCAO',
+'Administrador', 'admin@academiatopdastops.com', senhaAdmin, 'ADMIN',
+'Recepção', 'recepcao@academiatopdastops.com', senhaRecep, 'RECEPCAO',
       ]
     );
   }
